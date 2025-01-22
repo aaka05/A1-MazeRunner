@@ -28,24 +28,14 @@ public class Main {
 
             String inputFile = cmd.getOptionValue("i");
             logger.info("**** Reading the maze from file {}", inputFile);
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                StringBuilder row = new StringBuilder();
-                for (int idx = 0; idx < line.length(); idx++) {
-                    if (line.charAt(idx) == '#') {
-                        row.append("WALL ");
-                    } else if (line.charAt(idx) == ' ') {
-                        row.append("PASS ");
-                    }
-                }
-                logger.info(row.toString());
-            }
+
+            Maze maze = new Maze(inputFile);
+            logger.info("**** Maze read successfully");
+            maze.printMaze();
+
         } catch(Exception e) {
             logger.error("An error has occurred", e);
         }
-        logger.info("**** Computing path");
-        logger.info("PATH NOT COMPUTED");
         logger.info("** End of MazeRunner");
     }
 }
