@@ -31,14 +31,15 @@ public class Main {
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
             String line;
             while ((line = reader.readLine()) != null) {
+                StringBuilder row = new StringBuilder();
                 for (int idx = 0; idx < line.length(); idx++) {
                     if (line.charAt(idx) == '#') {
-                        System.out.print("WALL ");
+                        row.append("WALL ");
                     } else if (line.charAt(idx) == ' ') {
-                        System.out.print("PASS ");
+                        row.append("PASS ");
                     }
                 }
-                System.out.print(System.lineSeparator());
+                logger.info(row.toString());
             }
         } catch(Exception e) {
             logger.error("An error has occurred", e);
