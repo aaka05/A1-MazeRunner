@@ -81,27 +81,33 @@ public class Maze {
         int rows = maze.length; //gets the number of rows
         int cols = maze[0].length; //just gets the first row length
         
-        //check left border for an entry point
+        entry = null;
+        exit = null;
+      
+        //for entry point (it's the left most col)
         for (int i = 0; i < rows; i++) {
-            //in the first column, check if there is a space
             if (maze[i][0] == ' ') {
-                entry = new Point(0, i);
+                //add 1 to start at row 1 (0 index originally)
+                entry = new Point(1, i + 1);
                 break;
             }
         }
 
-        //check right border for an exit point
+        //for exit point (it's the right most col)
         for (int i = 0; i < rows; i++) {
-            //in the last column, check if there is a space
             if (maze[i][cols-1] == ' ') {
-                exit = new Point(cols-1, i);
+                //add 1 to start at row 1 (0 index originally)
+                exit = new Point(cols, i + 1);
                 break;
             }
         }
 
-        //if there is no entry or exit point, throw an error
-        if (entry == null || exit == null) {
-            throw new IllegalStateException("Maze must have both an entry point on the left and an exit point on the right");
+        if (entry == null && exit == null) {
+            throw new IllegalStateException("Maze has neither an entry point on the left nor an exit point on the right");
+        } else if (entry == null) {
+            throw new IllegalStateException("Maze is missing an entry point on the left side");
+        } else if (exit == null) {
+            throw new IllegalStateException("Maze is missing an exit point on the right side");
         }
     }
 }
