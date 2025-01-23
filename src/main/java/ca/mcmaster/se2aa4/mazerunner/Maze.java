@@ -7,27 +7,34 @@ public class Maze {
     private Point entry;
     private Point exit;
 
+    //constructor
     public Maze(String inputFile) {
         readMaze(inputFile);
     }
 
+    //reads the maze from the input file
     public void readMaze(String inputFile) {
         try {
+            //using buffered reader to read the file
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
             String line;
             StringBuilder mazeBuilder = new StringBuilder();
+            //to keep track of the number of rows and columns
             int rows = 0;
             int cols = 0;
 
+            //while there is a line in the file, append it to the maze builder
             while ((line = reader.readLine()) != null) {
                 mazeBuilder.append(line).append("\n");
                 rows++;
                 cols = line.length();
             }
 
+            //create the maze grid
             maze = new char[rows][cols];
+            //split the maze builder into lines
             String[] lines = mazeBuilder.toString().split("\n");
-
+            //for each line, convert it to a char array and add it to the maze
             for (int i = 0; i < rows; i++) {
                 maze[i] = lines[i].toCharArray();
             }
