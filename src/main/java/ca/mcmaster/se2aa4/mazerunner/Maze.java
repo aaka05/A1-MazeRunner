@@ -110,4 +110,19 @@ public class Maze {
             throw new IllegalStateException("Maze is missing an exit point on the right side");
         }
     }
+
+    //check if the point is PASS
+    public boolean isPassage(Point position) {
+        return maze[position.y - 1][position.x - 1] == ' ';
+    }
+
+    //get the height of the maze
+    public int getHeight() {
+        return maze.length;
+    }
+
+    //get the width of the maze
+    public int getWidth() {
+        return maze[0].length;
+    }
 }

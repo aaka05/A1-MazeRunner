@@ -34,14 +34,12 @@ public class Main {
             //display the maze
             maze.printMaze();
 
-            //the path starts at the entry point and facing east
-            Explorer explorer = new Explorer(maze.getEntry(), 'E');
+            PathFinder solver = new PathFinder(maze);
+            String solution = solver.solve();
             
-            /*I still need to implement the maze solving algorithm using Right Hand Rule
-            So this will be where the path is displayed. Example something like path.printPath()
-            I also have to use explorer class
-            */
-    
+            //print the solution path
+            logger.info("**** Path: {}", solution);
+            
         } catch(Exception e) {
             logger.error("An error has occurred", e);
         }
