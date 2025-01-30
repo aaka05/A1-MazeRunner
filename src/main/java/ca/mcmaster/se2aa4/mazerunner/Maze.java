@@ -2,6 +2,9 @@ package ca.mcmaster.se2aa4.mazerunner;
 
 import java.io.*;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Maze {
     private char[][] maze;
     private Point entry;
@@ -15,54 +18,62 @@ public class Maze {
     //reads the maze from the input file
     public void readMaze(String inputFile) {
         try {
-            //using buffered reader to read the file
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            List<String> lines = new ArrayList<>();
             String line;
-            StringBuilder mazeBuilder = new StringBuilder();
-            //to keep track of the number of rows and columns
-            int rows = 0;
-            int cols = 0;
-
-            //while there is a line in the file, append it to the maze builder
+            int maxWidth = 0;
+        
+            //read all lines and find the maximum width of the maze
             while ((line = reader.readLine()) != null) {
-                mazeBuilder.append(line).append("\n");
-                rows++;
-                cols = line.length();
+                //convert empty lines to spaces 
+                if (line.trim().isEmpty()) {
+                    if (maxWidth > 0) {
+                        //create a line of spaces with the same width as other lines
+                        line = " ".repeat(maxWidth);
+                    }
+                }
+                maxWidth = Math.max(maxWidth, line.length());
+                lines.add(line);
             }
-
+            reader.close();
+            
+            if (lines.isEmpty()) {
+                throw new IllegalStateException("The maze file is empty");
+            }
+            
             //create the maze grid
-            maze = new char[rows][cols];
-            //split the maze builder into lines
-            String[] lines = mazeBuilder.toString().split("\n");
-            //for each line, convert it to a char array and add it to the maze
+            int rows = lines.size();
+            maze = new char[rows][maxWidth];
+            
+            //fill the maze
             for (int i = 0; i < rows; i++) {
-                maze[i] = lines[i].toCharArray();
+                String currentLine = lines.get(i);
+                //if shorter than maxWidth, add spaces to the end
+                if (currentLine.length() < maxWidth) {
+                    currentLine = String.format("%-" + maxWidth + "s", currentLine);
+                }
+                maze[i] = currentLine.toCharArray();
             }
-
             
             findEntryAndExit();
-
+            
             System.out.println("Maze read successfully");
             System.out.println("Entry point found at: " + entry);
             System.out.println("Exit point found at: " + exit);
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Error reading maze: " + e.getMessage());
+            throw new IllegalStateException("Failed to read maze file", e);
         }
     }
 
     public void printMaze() {
         try {
             for (char[] row : maze) {
-                StringBuilder displayRow = new StringBuilder();
                 for (char cell : row) {
-                    if (cell == '#') {
-                        displayRow.append("WALL ");
-                    } else if (cell == ' ') {
-                        displayRow.append("PASS ");
-                    }
+                    System.out.print(cell);
                 }
-                System.out.println(displayRow.toString());
+                System.out.println();
             }
         } catch (Exception e) {
             System.out.println("Error displaying maze: " + e.getMessage());
@@ -78,16 +89,15 @@ public class Maze {
     }
 
     private void findEntryAndExit() {
-        int rows = maze.length; //gets the number of rows
-        int cols = maze[0].length; //just gets the first row length
+        int rows = maze.length;
+        int cols = maze[0].length;
         
         entry = null;
         exit = null;
       
         //for entry point (it's the left most col)
         for (int i = 0; i < rows; i++) {
-            if (maze[i][0] == ' ') {
-                //add 1 to start at row 1 (0 index originally)
+            if (maze[i][0] == ' ' || maze[i][0] == 'E') {
                 entry = new Point(1, i + 1);
                 break;
             }
@@ -95,19 +105,15 @@ public class Maze {
 
         //for exit point (it's the right most col)
         for (int i = 0; i < rows; i++) {
-            if (maze[i][cols-1] == ' ') {
-                //add 1 to start at row 1 (0 index originally)
+            if (maze[i][cols-1] == ' ' || maze[i][cols-1] == 'X') {
                 exit = new Point(cols, i + 1);
                 break;
             }
         }
-
-        if (entry == null && exit == null) {
-            throw new IllegalStateException("Maze has neither an entry point on the left nor an exit point on the right");
-        } else if (entry == null) {
-            throw new IllegalStateException("Maze is missing an entry point on the left side");
-        } else if (exit == null) {
-            throw new IllegalStateException("Maze is missing an exit point on the right side");
+        
+        //if entry or exit not found, throw appropriate error
+        if (entry == null || exit == null) {
+            throw new IllegalStateException("Could not find valid entry and exit points in maze");
         }
     }
 

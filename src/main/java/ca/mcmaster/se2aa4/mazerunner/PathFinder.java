@@ -16,31 +16,26 @@ public class PathFinder {
     public String solve() {
         //while the explorer is not at the exit point
         while (!explorer.getPosition().equals(maze.getExit())) {
-            //turn right
+            //first try to turn right and move
             explorer.turnRight();
-            //get the next position 
-            Point nextPosition = getNextPosition(explorer.getPosition(), explorer.getDirection());
+            Point rightPosition = getNextPosition(explorer.getPosition(), explorer.getDirection());
             
-            //if the next position is not a valid move
-            if (!isValidMove(nextPosition)) {
-                //turn left
+            if (isValidMove(rightPosition)) {
+                //if move right is valid, move forward
+                explorer.moveForward();
+            } else {
+                //if move right is not valid, turn back left and try moving forward
                 explorer.turnLeft();
-                nextPosition = getNextPosition(explorer.getPosition(), explorer.getDirection());
+                Point forwardPosition = getNextPosition(explorer.getPosition(), explorer.getDirection());
                 
-                //if the next position is not a valid move
-                if (!isValidMove(nextPosition)) {
-                    //turn left
+                if (isValidMove(forwardPosition)) {
+                    //if move forward is valid, move forward
+                    explorer.moveForward();
+                } else {
+                    //if move forward is not valid, turn left and try again
                     explorer.turnLeft();
-                    nextPosition = getNextPosition(explorer.getPosition(), explorer.getDirection());
-                    
-                    if (!isValidMove(nextPosition)) {
-                        //can't go left either, turn left one more time (reverse direction)
-                        explorer.turnLeft();
-                    }
                 }
             }
-            //move forward
-            explorer.moveForward();
         }
         
         return String.join("", explorer.getPath().getPath());
