@@ -13,7 +13,7 @@ public class PathFinder {
     }
 
     //solve the maze
-    public String solve() {
+    public Path solve() {
         //while the explorer is not at the exit point
         while (!explorer.getPosition().equals(maze.getExit())) {
             //first try to turn right and move
@@ -38,7 +38,7 @@ public class PathFinder {
             }
         }
         
-        return String.join("", explorer.getPath().getPath());
+        return explorer.getPath();
     }
 
     private Point getNextPosition(Point current, char direction) {

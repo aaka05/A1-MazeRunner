@@ -35,10 +35,10 @@ public class Main {
             maze.printMaze();
 
             PathFinder solver = new PathFinder(maze);
-            String solution = solver.solve();
+            Path solution = solver.solve();
             
-            //print the solution path
-            logger.info("**** Path: {}", solution);
+            //print both types of the path
+            logger.info("**** {}", solution.toString());
             
         } catch(Exception e) {
             logger.error("An error has occurred", e);
