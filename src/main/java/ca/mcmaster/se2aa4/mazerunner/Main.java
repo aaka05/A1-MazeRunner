@@ -11,13 +11,11 @@ public class Main {
     public static void main(String[] args) {
         logger.info("** Starting Maze Runner");
         
-        //create command line options
         Options options = new Options();
         options.addOption("i", true, "Input file path");
 
-        CommandLineParser parser = new DefaultParser();
         try {
-            CommandLine cmd = parser.parse(options, args);
+            CommandLine cmd = new DefaultParser().parse(options, args);
 
             //if the input file is not provided, throw an error
             if (!cmd.hasOption("i")) {
@@ -36,9 +34,7 @@ public class Main {
 
             PathFinder solver = new PathFinder(maze);
             Path solution = solver.solve();
-            
-            //print both types of the path
-            logger.info("**** {}", solution.toString());
+            logger.info("Found a solution!\n{}", solution.toString());
             
         } catch(Exception e) {
             logger.error("An error has occurred", e);

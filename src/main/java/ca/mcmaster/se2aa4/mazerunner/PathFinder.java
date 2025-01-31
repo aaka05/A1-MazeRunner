@@ -18,26 +18,22 @@ public class PathFinder {
         while (!explorer.getPosition().equals(maze.getExit())) {
             //first try to turn right and move
             explorer.turnRight();
-            Point rightPosition = getNextPosition(explorer.getPosition(), explorer.getDirection());
+            Point nextPos = getNextPosition(explorer.getPosition(), explorer.getDirection());
             
-            if (isValidMove(rightPosition)) {
+            if (canMoveTo(nextPos)) {
                 //if move right is valid, move forward
-                explorer.moveForward();
+                explorer.moveForward();  
             } else {
-                //if move right is not valid, turn back left and try moving forward
-                explorer.turnLeft();
-                Point forwardPosition = getNextPosition(explorer.getPosition(), explorer.getDirection());
+                explorer.turnLeft();  //go back to original direction
+                nextPos = getNextPosition(explorer.getPosition(), explorer.getDirection());
                 
-                if (isValidMove(forwardPosition)) {
-                    //if move forward is valid, move forward
-                    explorer.moveForward();
+                if (canMoveTo(nextPos)) {
+                    explorer.moveForward(); //if move forward is valid, move forward
                 } else {
-                    //if move forward is not valid, turn left and try again
-                    explorer.turnLeft();
+                    explorer.turnLeft(); //try another direction next time
                 }
             }
         }
-        
         return explorer.getPath();
     }
 
@@ -55,8 +51,8 @@ public class PathFinder {
         return next;
     }
 
-    private boolean isValidMove(Point position) {
-        //the position is 1-based, so we need to convert to 0-based indexing
+    
+    private boolean canMoveTo(Point position) {
         int row = position.y - 1;
         int col = position.x - 1;
         

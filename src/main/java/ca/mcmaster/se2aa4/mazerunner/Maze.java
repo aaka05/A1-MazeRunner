@@ -41,16 +41,15 @@ public class Maze {
                 throw new IllegalStateException("The maze file is empty");
             }
             
-            //create the maze grid
-            int rows = lines.size();
-            maze = new char[rows][maxWidth];
+            //make the maze grid
+            maze = new char[lines.size()][maxWidth];
             
             //fill the maze
-            for (int i = 0; i < rows; i++) {
+            for (int i = 0; i < lines.size(); i++) {
                 String currentLine = lines.get(i);
                 //if shorter than maxWidth, add spaces to the end
                 if (currentLine.length() < maxWidth) {
-                    currentLine = String.format("%-" + maxWidth + "s", currentLine);
+                    currentLine += " ".repeat(maxWidth - currentLine.length());  //pad with spaces
                 }
                 maze[i] = currentLine.toCharArray();
             }
@@ -62,8 +61,7 @@ public class Maze {
             System.out.println("Exit point found at: " + exit);
 
         } catch (IOException e) {
-            System.out.println("Error reading maze: " + e.getMessage());
-            throw new IllegalStateException("Failed to read maze file", e);
+            throw new IllegalStateException("Couldn't read the maze: " + e.getMessage());
         }
     }
 
