@@ -55,10 +55,6 @@ public class Maze {
             }
             
             findEntryAndExit();
-            
-            System.out.println("Maze read successfully");
-            System.out.println("Entry point found at: " + entry);
-            System.out.println("Exit point found at: " + exit);
 
         } catch (IOException e) {
             throw new IllegalStateException("Couldn't read the maze: " + e.getMessage());

@@ -13,6 +13,7 @@ public class Main {
         
         Options options = new Options();
         options.addOption("i", true, "Input file path");
+        options.addOption("p", true, "Path to check");
 
         try {
             CommandLine cmd = new DefaultParser().parse(options, args);
@@ -29,12 +30,18 @@ public class Main {
             //read the maze from the input file
             Maze maze = new Maze(inputFile);
             logger.info("**** Maze read successfully");
-            //display the maze
-            maze.printMaze();
 
-            PathFinder solver = new PathFinder(maze);
-            Path solution = solver.solve();
-            logger.info("Found a solution!\n{}", solution.toString());
+            //if the path to check is provided, verify the path
+            if (cmd.hasOption("p")) {
+                String pathToCheck = cmd.getOptionValue("p");
+                CheckPath checker = new CheckPath(maze);
+                System.out.println(checker.checkPath(pathToCheck) ? "Valid path" : "Invalid path");
+            } else {
+                //otherwise, solve the maze and display the path
+                PathFinder solver = new PathFinder(maze);
+                Path solution = solver.solve();
+                System.out.println(solution.getFactorizedPath());
+            }
             
         } catch(Exception e) {
             logger.error("An error has occurred", e);

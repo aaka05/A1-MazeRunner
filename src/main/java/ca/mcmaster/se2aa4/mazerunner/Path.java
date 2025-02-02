@@ -4,24 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Path {
-    //no implementation as of now
     private List<String> path;
 
+    //constructor
     public Path() {
         this.path = new ArrayList<>();
     }
     
+    //adds a step to the path
     public void addStep(String step) {
         path.add(step);
     }
 
+    //gets the path
     public List<String> getPath() {
         return path;
     }
 
     //gets the factorized path
     public String getFactorizedPath() {
-        //no path
+        //no path to factorize
         if (path.isEmpty()) {
             return "";
         }
@@ -39,24 +41,17 @@ public class Path {
                 if (count > 1) {
                     result.append(count);
                 }
-                result.append(currentStep).append(",");
+                result.append(currentStep).append(" ");
                 currentStep = path.get(i);
                 count = 1;
             }
         }
-        //for the last group of steps
+        
         if (count > 1) {
             result.append(count);
         }
         result.append(currentStep);
 
-        return result.toString();
-    }
-
-    //returns paths
-    public String toString() {
-        String normalPath = String.join("", path);
-        String factorized = getFactorizedPath();
-        return String.format("Path: %s%nFactorized: %s", normalPath, factorized);
+        return result.toString().trim();
     }
 }
