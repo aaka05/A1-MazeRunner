@@ -28,6 +28,14 @@
       <version>1.6.0</version>
     </dependency>
 
+    <!-- JUnit dependencies for testing -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.9.2</version>
+      <scope>test</scope>
+    </dependency>
+
     <!-- To support Logging through Log4J-->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
@@ -82,4 +90,4 @@
     </dependencies>
   </dependencyManagement>
 
-</project>
+</project> 
