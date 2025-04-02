@@ -29,5 +29,23 @@ public class ExplorerTest {
         assertEquals(explorer.getDirection(), 'S');
     }
 
+    @Test
+    public void testMultipleDirectionChanges() {
+        Explorer explorer = new Explorer(new Point(2, 2), 'N');
+        explorer.turnRight();  
+        explorer.turnRight();  
+        explorer.turnRight();  
+        assertEquals(explorer.getDirection(), 'W');
+    }
+
+    @Test
+    public void testMoveForwardInDifferentDirections() {
+        Explorer explorer = new Explorer(new Point(2, 2), 'N');
+        explorer.moveForward();  
+        assertEquals(explorer.getPosition(), new Point(2, 1));
         
+        explorer.turnRight();   
+        explorer.moveForward();  
+        assertEquals(explorer.getPosition(), new Point(3, 1));
+    }
 }

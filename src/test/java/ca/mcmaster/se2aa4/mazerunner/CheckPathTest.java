@@ -6,24 +6,34 @@ import org.junit.jupiter.api.Test;
 
 
 public class CheckPathTest {
-    @Test
-    public void testCheckValidPath() {
-        Maze maze = new Maze("examples/small.maz.txt");
-        PathFinder finder = new PathFinder(maze);
-        Path solution = finder.solve();
-        CheckPath checker = new CheckPath(maze);
-
-        //expand the factorized path
-        String rawPath = String.join("", solution.getPath());
-        assertTrue(checker.checkPath(rawPath));
-    }
+        @Test
+        public void testCheckValidPath() {
+            Maze maze = new Maze("examples/straight.maz.txt");
+            String solution = "F F F F";
+            CheckPath checker = new CheckPath(maze);
+            assertTrue(checker.checkPath(solution));
+        }
 
 
     @Test
     public void testCheckInvalidPath() {
         Maze maze = new Maze("examples/small.maz.txt");
         CheckPath checker = new CheckPath(maze);
-        assertFalse(checker.checkPath("FFFFF"));  // Path that hits a wall
+        assertFalse(checker.checkPath("F F F F F"));  
+    }
+
+    @Test
+    public void testCheckOutOfBoundsPath() {
+        Maze maze = new Maze("examples/small.maz.txt");
+        CheckPath checker = new CheckPath(maze);
+        assertFalse(checker.checkPath("LLFF"));  
+    }
+
+    @Test
+    public void testCheckWallCollision() {
+        Maze maze = new Maze("examples/small.maz.txt");
+        CheckPath checker = new CheckPath(maze);
+        assertFalse(checker.checkPath("LF"));  
     }
 
 }

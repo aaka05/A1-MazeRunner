@@ -1,7 +1,6 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-import static org.junit.jupiter.api.Assertions.*;
-import java.awt.Point;     
+import static org.junit.jupiter.api.Assertions.*;  
 import org.junit.jupiter.api.Test;
 
 
