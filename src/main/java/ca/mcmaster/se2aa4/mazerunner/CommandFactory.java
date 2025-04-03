@@ -9,18 +9,23 @@ import ca.mcmaster.se2aa4.mazerunner.Commands.CommandTurnLeft;
 import ca.mcmaster.se2aa4.mazerunner.Commands.CommandTurnRight;
 
 public class CommandFactory {
-    private final Map<Character, Supplier<Command>> commandMap;
+    private final Explorer explorer;
+    private final Maze maze;
 
     public CommandFactory(Explorer explorer, Maze maze) {
-        commandMap = Map.of(
-            'F', () -> new CommandMoveForward(explorer, maze),
-            'L', () -> new CommandTurnLeft(explorer),
-            'R', () -> new CommandTurnRight(explorer)
-        );
+        this.explorer = explorer;
+        this.maze = maze;
     }
 
     public Command getCommand(char action) {
-        Supplier<Command> supplier = commandMap.get(action);
-        return supplier != null ? supplier.get() : null;
+        if (action == 'F') {
+            return new CommandMoveForward(explorer, maze);
+        } else if (action == 'L') {
+            return new CommandTurnLeft(explorer);
+        } else if (action == 'R') {
+            return new CommandTurnRight(explorer);
+        } else {
+            return null;
+        }
     }
 }
