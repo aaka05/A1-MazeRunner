@@ -2,6 +2,9 @@ package ca.mcmaster.se2aa4.mazerunner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import ca.mcmaster.se2aa4.mazerunner.Tools.MazeTool;
+
 import org.apache.commons.cli.*;
 
 public class Main {
@@ -25,24 +28,18 @@ public class Main {
             }
 
             String inputFile = cmd.getOptionValue("i");
+            String pathToCheck = cmd.getOptionValue("p");
+
             logger.info("**** Reading the maze from file {}", inputFile);
 
             //read the maze from the input file
             Maze maze = new Maze(inputFile);
             logger.info("**** Maze read successfully");
 
-            //if the path to check is provided, verify the path
-            if (cmd.hasOption("p")) {
-                String pathToCheck = cmd.getOptionValue("p");
-                CheckPath checker = new CheckPath(maze);
-                System.out.println(checker.checkPath(pathToCheck) ? "Valid path" : "Invalid path");
-            } else {
-                //otherwise, solve the maze and display the path
-                PathFinder solver = new PathFinder(maze);
-                Path solution = solver.solve();
-                System.out.println(solution.getFactorizedPath());
-            }
-            
+            //factory pattern to create the correct tool
+            MazeTool tool = MazeToolFactory.createTool(maze, pathToCheck);
+            tool.run();
+
         } catch(Exception e) {
             logger.error("An error has occurred", e);
         }
