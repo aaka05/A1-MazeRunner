@@ -16,6 +16,6 @@ public class MazeSolverTool implements MazeTool {
     public void run() {
         PathFinder pathFinder = new PathFinder(maze);
         Path path = pathFinder.solve();
-        System.out.println(path);
+        System.out.println(path.getFactorizedPath());
     }
 }

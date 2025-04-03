@@ -5,8 +5,10 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.mcmaster.se2aa4.mazerunner.Tiles.Tile;
+
 public class Maze {
-    private char[][] maze;
+    private Tile[][] mazeTiles;
     private Point entry;
     private Point exit;
 
@@ -40,21 +42,26 @@ public class Maze {
             if (lines.isEmpty()) {
                 throw new IllegalStateException("The maze file is empty");
             }
-            
+
+            int height = lines.size();
+
             //make the maze grid
-            maze = new char[lines.size()][maxWidth];
+            mazeTiles = new Tile[height][maxWidth];
             
             //fill the maze
-            for (int i = 0; i < lines.size(); i++) {
+            for (int i = 0; i < height; i++) {
                 String currentLine = lines.get(i);
                 //if shorter than maxWidth, add spaces to the end
                 if (currentLine.length() < maxWidth) {
                     currentLine += " ".repeat(maxWidth - currentLine.length());  //pad with spaces
                 }
-                maze[i] = currentLine.toCharArray();
+                for (int j = 0; j < maxWidth; j++) {
+                    char symbol = currentLine.charAt(j);
+                    mazeTiles[i][j] = TileFactory.createTile(symbol);
+                }
             }
             
-            findEntryAndExit();
+            findEntryAndExit(lines);
 
         } catch (IOException e) {
             throw new IllegalStateException("Couldn't read the maze: " + e.getMessage());
@@ -63,8 +70,8 @@ public class Maze {
 
     public void printMaze() {
         try {
-            for (char[] row : maze) {
-                for (char cell : row) {
+            for (Tile[] row : mazeTiles) {
+                for (Tile cell : row) {
                     System.out.print(cell);
                 }
                 System.out.println();
@@ -82,16 +89,17 @@ public class Maze {
         return exit;
     }
 
-    private void findEntryAndExit() {
-        int rows = maze.length;
-        int cols = maze[0].length;
+    private void findEntryAndExit(List<String> lines) {
+        int rows = lines.size();
+        int cols = lines.get(0).length();
         
         entry = null;
         exit = null;
       
         //for entry point (it's the left most col)
         for (int i = 0; i < rows; i++) {
-            if (maze[i][0] == ' ' || maze[i][0] == 'E') {
+            char symbol = lines.get(i).charAt(0);
+            if (symbol == ' ' || symbol == 'E') {
                 entry = new Point(1, i + 1);
                 break;
             }
@@ -99,7 +107,8 @@ public class Maze {
 
         //for exit point (it's the right most col)
         for (int i = 0; i < rows; i++) {
-            if (maze[i][cols-1] == ' ' || maze[i][cols-1] == 'X') {
+            char symbol = lines.get(i).charAt(cols - 1);
+            if (symbol == ' ' || symbol == 'X') {
                 exit = new Point(cols, i + 1);
                 break;
             }
@@ -113,16 +122,18 @@ public class Maze {
 
     //check if the point is PASS
     public boolean isPassage(Point position) {
-        return maze[position.y - 1][position.x - 1] == ' ';
+        int row = position.y - 1;
+        int col = position.x - 1;
+        return mazeTiles[row][col].isPassable();
     }
 
     //get the height of the maze
     public int getHeight() {
-        return maze.length;
+        return mazeTiles.length;
     }
 
     //get the width of the maze
     public int getWidth() {
-        return maze[0].length;
+        return mazeTiles[0].length;
     }
 }
