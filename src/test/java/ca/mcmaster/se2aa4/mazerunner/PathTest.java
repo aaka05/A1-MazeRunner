@@ -1,8 +1,7 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-import static org.junit.jupiter.api.Assertions.*;  
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-
 
 public class PathTest {
     @Test
@@ -32,6 +31,36 @@ public class PathTest {
         path.addStep("F");
         assertEquals("2F 2R 2F 2L 2F", path.getFactorizedPath());
     }
-    
-    
+
+    @Test
+    public void testEmptyPath() {
+        Path path = new Path();
+        assertEquals("", path.getFactorizedPath());
+    }
+
+    @Test
+    public void testSingleStepPath() {
+        Path path = new Path();
+        path.addStep("F");
+        assertEquals("F", path.getFactorizedPath());
+    }
+
+    @Test
+    public void testComplexFactorizedPath() {
+        Path path = new Path();
+        // Add pattern: FFFLFFFLFFF
+        path.addStep("F");
+        path.addStep("F");
+        path.addStep("F");
+        path.addStep("L");
+        path.addStep("F");
+        path.addStep("F");
+        path.addStep("F");
+        path.addStep("L");
+        path.addStep("F");
+        path.addStep("F");
+        path.addStep("F");
+        assertEquals("3F L 3F L 3F", path.getFactorizedPath());
+    }
+
 }

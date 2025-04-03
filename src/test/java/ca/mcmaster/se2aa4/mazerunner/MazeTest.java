@@ -22,4 +22,25 @@ public class MazeTest {
         Point entry = maze.getEntry();
         assertTrue(maze.isPassage(entry));
     }
+
+    @Test
+    public void testMazeOutOfBounds() {
+        Maze maze = new Maze("examples/small.maz.txt");
+        Point outOfBounds = new Point(100, 100);
+        assertFalse(maze.isPassage(outOfBounds));
+    }
+
+    @Test
+    public void testMazeDimensions() {
+        Maze maze = new Maze("examples/small.maz.txt");
+        assertTrue(maze.getHeight() > 0);
+        assertTrue(maze.getWidth() > 0);
+    }
+
+    @Test
+    public void testInvalidMazeFile() {
+        assertThrows(IllegalStateException.class, () -> {
+            new Maze("nonexistent.maz.txt");
+        });
+    }
 }

@@ -124,6 +124,9 @@ public class Maze {
     public boolean isPassage(Point position) {
         int row = position.y - 1;
         int col = position.x - 1;
+        if(row < 0 || row >= mazeTiles.length || col < 0 || col >= mazeTiles[0].length) {
+            return false;
+        }
         return mazeTiles[row][col].isPassable();
     }
 
